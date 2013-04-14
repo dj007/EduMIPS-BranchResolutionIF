@@ -49,10 +49,10 @@ public abstract class FlowControl_IType extends FlowControlInstructions {
     this.paramCount = 3;
   }
 
-  public void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException, BranchException {
+  public void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException {
   }
 
-  public void EX() throws IrregularStringOfBitsException, IntegerOverflowException, TwosComplementSumException, BranchException, JumpException, IrregularWriteOperationException, RAWException {
+  public void EX() throws IrregularStringOfBitsException, IntegerOverflowException, TwosComplementSumException, JumpException, IrregularWriteOperationException, RAWException {
   }
 
   public void MEM() throws IrregularStringOfBitsException, MemoryElementNotFoundException {

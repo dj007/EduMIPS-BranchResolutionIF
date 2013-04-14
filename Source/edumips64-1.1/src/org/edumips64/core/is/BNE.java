@@ -45,7 +45,8 @@ public class BNE extends FlowControl_IType {
         name = "BNE";
     }
 
-    public void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException {
+    @Override
+    public void IF() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException {
         if (cpu.getRegister(params.get(RS_FIELD)).getWriteSemaphore() > 0 || cpu.getRegister(params.get(RT_FIELD)).getWriteSemaphore() > 0) {
             throw new RAWException();
         }
@@ -58,34 +59,7 @@ public class BNE extends FlowControl_IType {
         String offset = bs.getBinString();
         boolean condition = !rs.equals(rt);
 
-        String pc_new = "";
-        Register pc = cpu.getPC();
-        String pc_old = cpu.getPC().getBinString();
-
-        //subtracting 4 to the pc_old temporary variable using bitset64 safe methods
-        BitSet64 bs_temp = new BitSet64();
-        bs_temp.writeDoubleWord(-4);
-        pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
-
-        //updating program counter
-        pc_new = InstructionsUtils.twosComplementSum(pc_old, offset);
-        pc.setBits(pc_new, 0);
-
-        throw new JumpException();
-    }
-
-    public void EX() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, TwosComplementSumException, JumpException, BranchException {
-
-        //getting registers rs and rt
-        String rs = cpu.getRegister(params.get(RS_FIELD)).getBinString();
-        String rt = cpu.getRegister(params.get(RT_FIELD)).getBinString();
-        //converting offset into a signed binary value of 64 bits in length
-        BitSet64 bs = new BitSet64();
-        bs.writeHalf(params.get(OFFSET_FIELD));
-        String offset = bs.getBinString();
-        boolean condition = !rs.equals(rt);
-
-        if (!condition) {
+        if (condition) {
             String pc_new = "";
             Register pc = cpu.getPC();
             String pc_old = cpu.getPC().getBinString();
@@ -93,16 +67,45 @@ public class BNE extends FlowControl_IType {
             //subtracting 4 to the pc_old temporary variable using bitset64 safe methods
             BitSet64 bs_temp = new BitSet64();
             bs_temp.writeDoubleWord(-4);
-            pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
+            //pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
 
             //updating program counter
-            pc_new = InstructionsUtils.twosComplementSubstraction(pc_old, offset);
+            pc_new = InstructionsUtils.twosComplementSum(pc_old, offset);
             pc.setBits(pc_new, 0);
 
-            CPU.incrementBranchNotTaken();
-            throw new BranchException();
-        } else {
-            CPU.incrementBranchTaken();
+            throw new JumpException();
         }
     }
+
+//    public void EX() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, TwosComplementSumException, JumpException, BranchException {
+//
+//        //getting registers rs and rt
+//        String rs = cpu.getRegister(params.get(RS_FIELD)).getBinString();
+//        String rt = cpu.getRegister(params.get(RT_FIELD)).getBinString();
+//        //converting offset into a signed binary value of 64 bits in length
+//        BitSet64 bs = new BitSet64();
+//        bs.writeHalf(params.get(OFFSET_FIELD));
+//        String offset = bs.getBinString();
+//        boolean condition = !rs.equals(rt);
+//
+//        if (!condition) {
+//            String pc_new = "";
+//            Register pc = cpu.getPC();
+//            String pc_old = cpu.getPC().getBinString();
+//
+//            //subtracting 4 to the pc_old temporary variable using bitset64 safe methods
+//            BitSet64 bs_temp = new BitSet64();
+//            bs_temp.writeDoubleWord(-4);
+//            pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
+//
+//            //updating program counter
+//            pc_new = InstructionsUtils.twosComplementSubstraction(pc_old, offset);
+//            pc.setBits(pc_new, 0);
+//
+//            CPU.incrementBranchNotTaken();
+//            throw new BranchException();
+//        } else {
+//            CPU.incrementBranchTaken();
+//        }
+//    }
 }

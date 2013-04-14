@@ -27,6 +27,10 @@
 package org.edumips64.core.is;
 
 import org.edumips64.core.*;
+import org.edumips64.core.fpu.FPDivideByZeroException;
+import org.edumips64.core.fpu.FPInvalidOperationException;
+import org.edumips64.core.fpu.FPOverflowException;
+import org.edumips64.core.fpu.FPUnderflowException;
 import org.edumips64.utils.*;
 
 /**This is the base class for J-Type flowcontrol instructions
@@ -45,7 +49,7 @@ public class FlowControl_JType extends FlowControlInstructions {
     this.syntax = "%E";
     this.paramCount = 1;
   }
-
+  
   public void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException {
   }
 

@@ -26,6 +26,10 @@
 package org.edumips64.core.is;
 
 import org.edumips64.core.*;
+import org.edumips64.core.fpu.FPDivideByZeroException;
+import org.edumips64.core.fpu.FPInvalidOperationException;
+import org.edumips64.core.fpu.FPOverflowException;
+import org.edumips64.core.fpu.FPUnderflowException;
 import org.edumips64.utils.*;
 
 
@@ -35,7 +39,7 @@ import org.edumips64.utils.*;
  */
 public abstract class FlowControlInstructions extends Instruction {
   protected static CPU cpu = CPU.getInstance();
-  public void IF() {
+  public void IF() throws JumpException, HaltException, IrregularStringOfBitsException, IntegerOverflowException, TwosComplementSumException, IrregularWriteOperationException, DivisionByZeroException, NotAlignException, FPInvalidOperationException, FPUnderflowException, FPOverflowException, FPDivideByZeroException, TwosComplementSumException, JumpException, RAWException {
     Dinero din = Dinero.getInstance();
 
     try {
@@ -44,8 +48,8 @@ public abstract class FlowControlInstructions extends Instruction {
       e.printStackTrace();
     }
   }
-  public abstract void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException, BranchException;
-  public abstract void EX() throws IrregularStringOfBitsException, IntegerOverflowException, IrregularWriteOperationException, BranchException, TwosComplementSumException, JumpException, RAWException;
+  public abstract void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException;
+  public abstract void EX() throws IrregularStringOfBitsException, IntegerOverflowException, IrregularWriteOperationException, TwosComplementSumException, JumpException, RAWException;
   public abstract void MEM() throws IrregularStringOfBitsException, MemoryElementNotFoundException;
   public abstract void WB() throws IrregularStringOfBitsException;
   public abstract void pack() throws IrregularStringOfBitsException;

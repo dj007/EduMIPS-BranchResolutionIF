@@ -104,6 +104,7 @@ public abstract class Instruction {
 
     return returnedObject;
   }
+  
   public enum InstructionEnumerator {
 
     //ALU R-Type 32-bits
@@ -752,15 +753,15 @@ public abstract class Instruction {
    * Now it is used in order to generate the Dinero trace-file
    *</pre>
    */
-  public void IF() throws BreakException {}
-
+  public void IF() throws JumpException, BreakException,HaltException, IrregularStringOfBitsException, IntegerOverflowException, TwosComplementSumException, IrregularWriteOperationException, DivisionByZeroException, NotAlignException, FPInvalidOperationException, FPUnderflowException, FPOverflowException, FPDivideByZeroException, TwosComplementSumException, JumpException, RAWException, JumpException {}
+  
   /**
    * <pre>
    * Decode stage of the Pipeline
    * In this method all instructions that modify GPRs lock the involved register
    *</pre>
    **/
-  public abstract void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, TwosComplementSumException, HaltException, JumpException, BreakException, WAWException, FPInvalidOperationException, BranchException;
+  public abstract void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, TwosComplementSumException, HaltException, JumpException, BreakException, WAWException, FPInvalidOperationException;
 
   /**
    * <pre>
@@ -769,7 +770,7 @@ public abstract class Instruction {
    * </pre>
    **/
 
-  public abstract void EX() throws HaltException, IrregularStringOfBitsException, IntegerOverflowException, TwosComplementSumException, IrregularWriteOperationException, DivisionByZeroException, NotAlignException, FPInvalidOperationException, FPUnderflowException, FPOverflowException, FPDivideByZeroException, BranchException, TwosComplementSumException, JumpException, RAWException;
+  public abstract void EX() throws HaltException, IrregularStringOfBitsException, IntegerOverflowException, TwosComplementSumException, IrregularWriteOperationException, DivisionByZeroException, NotAlignException, FPInvalidOperationException, FPUnderflowException, FPOverflowException, FPDivideByZeroException, TwosComplementSumException, JumpException, RAWException;
 
   /**
    * <pre>

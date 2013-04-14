@@ -34,7 +34,7 @@ import org.edumips64.utils.*;
 
 public abstract class ComputationalInstructions extends Instruction {
   protected static CPU cpu = CPU.getInstance();
-  public void IF() {
+  public void IF() throws JumpException {
     Dinero din = Dinero.getInstance();
 
     try {

@@ -45,7 +45,8 @@ public class B extends FlowControl_IType {
     name = "B";
   }
 
-  public void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException, BranchException {
+   @Override
+   public void IF() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException {
     //getting registers rs and rt
     //converting offset into a signed binary value of 64 bits in length
     BitSet64 bs = new BitSet64();
@@ -59,7 +60,7 @@ public class B extends FlowControl_IType {
     //subtracting 4 to the pc_old temporary variable using bitset64 safe methods
     BitSet64 bs_temp = new BitSet64();
     bs_temp.writeDoubleWord(-4);
-    pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
+    //pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
 
     //updating program counter
     pc_new = InstructionsUtils.twosComplementSum(pc_old, offset);

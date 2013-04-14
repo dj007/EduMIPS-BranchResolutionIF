@@ -762,13 +762,13 @@ public class CPU {
             }
         } 
         catch (JumpException ex) {
-            try {
-                if (pipe.get(PipeStatus.IF) != null) {  //rispetto a dimips scambia le load con le IF
-                    pipe.get(PipeStatus.IF).IF();
-                }
-            } catch (BreakException bex) {
-                logger.info("Caught a BREAK after a Jump: ignoring it.");
-            }
+            //try {
+             //   if (pipe.get(PipeStatus.IF) != null) {  //rispetto a dimips scambia le load con le IF
+                   // pipe.get(PipeStatus.IF).IF();
+              //  }
+           // } catch (BreakException bex) {
+            //    logger.info("Caught a BREAK after a Jump: ignoring it.");
+           // }
 
             // A J-Type instruction has just modified the Program Counter. We need to
             // put in the IF state the instruction the PC points to
@@ -782,37 +782,6 @@ public class CPU {
                 throw new SynchronousException(syncex);
             }
 
-        }
-        catch (BranchException ex) {
-
-            try {
-                if (pipe.get(PipeStatus.IF) != null) //rispetto a dimips scambia le load con le IF
-                {
-                    pipe.get(PipeStatus.IF).IF();
-                }
-            } catch (BreakException bex) {
-                logger.info("Caught a BREAK after a Jump: ignoring it.");
-            }
-            //BranchMiss++;
-            // A J-Type instruction has just modified the Program Counter. We need to
-            // put in the IF state the instruction the PC points to
-            pipe.put(PipeStatus.EX, Instruction.buildInstruction("NOP"));
-            pipe.put(PipeStatus.ID, Instruction.buildInstruction("BUBBLE"));
-            pipe.put(PipeStatus.MEM, pipe.get(PipeStatus.EX));
-            pipe.put(PipeStatus.IF, mem.getInstruction(pc));
-
-            //pipe.put(PipeStatus.EX, Instruction.buildInstruction("BUBBLE"));	
-            old_pc.writeDoubleWord((pc.getValue()));
-            pc.writeDoubleWord((pc.getValue()) + 4);
-
-            //pipe.put(PipeStatus.ID, pipe.get(PipeStatus.IF));
-            //pipe.put(PipeStatus.IF, mem.getInstruction(pc));
-            //old_pc.writeDoubleWord((pc.getValue()));
-            //pc.writeDoubleWord((pc.getValue())+4);
-
-            if (syncex != null) {
-                throw new SynchronousException(syncex);
-            }
         }
         catch (RAWException ex) {
             if (currentPipeStatus == PipeStatus.ID) {
