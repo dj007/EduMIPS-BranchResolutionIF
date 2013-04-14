@@ -30,7 +30,7 @@ import org.edumips64.utils.*;
 /**
  * <
  * pre>
- *        Syntax: BNQZ rs, offset
+ *        Syntax: BEQZ rs, offset
  *   Description: if rs == 0 then branch
  *                To test a GPR then do a PC-relative conditional branch
  * </pre>
@@ -66,7 +66,6 @@ public class BEQZ extends FlowControl_IType {
         String offset = bs.getBinString();
         boolean condition = rs.equals(zero);
 
-        //if (condition) {
         String pc_new = "";
         Register pc = cpu.getPC();
         String pc_old = cpu.getPC().getBinString();
@@ -81,7 +80,6 @@ public class BEQZ extends FlowControl_IType {
         pc.setBits(pc_new, 0);
 
         throw new JumpException();
-        //}
     }
 
     public void EX()
@@ -101,10 +99,8 @@ public class BEQZ extends FlowControl_IType {
 
             //subtracting 4 to the pc_old temporary variable using bitset64 safe methods
             BitSet64 bs_temp = new BitSet64();
-            //bs_temp.writeDoubleWord(-4);
             bs_temp.writeDoubleWord(-4);
             pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
-            //old_pc_backup = pc_old;
 
 
             //updating program counter
@@ -112,10 +108,10 @@ public class BEQZ extends FlowControl_IType {
             pc_new = InstructionsUtils.twosComplementSubstraction(pc_old, offset);
             pc.setBits(pc_new, 0);
 
-            CPU.incrBranchNotTaken();
+            CPU.incrementBranchNotTaken();
             throw new BranchException();
         } else {
-            CPU.incrBranchTaken();
+            CPU.incrementBranchTaken();
         }
     }
 

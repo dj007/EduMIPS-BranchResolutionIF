@@ -5,12 +5,11 @@
 package org.edumips64.core.is;
 
 /**
- *
- * @author mj007
+ * @author Amjad Al-Rikabi
  */
 
 /*
- * JumpException.java
+ * BreakException.java
  *
  *  20th may 2006
  * Exception for the MIPS64 Instruction Set
@@ -36,8 +35,5 @@ package org.edumips64.core.is;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/**
- * @author Trubia Massimo, Russo Daniele
- */
 public class BranchException extends Exception { }
 

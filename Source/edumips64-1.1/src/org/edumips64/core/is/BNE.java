@@ -28,8 +28,7 @@ import org.edumips64.core.*;
 import org.edumips64.utils.*;
 
 /**
- * <
- * pre>
+ * <pre>
  * Syntax: BNE rt, rs, immediate Description: if rs != rt then branch To compare
  * GPRs then do a PC-relative conditional branch
  * </pre>
@@ -46,7 +45,7 @@ public class BNE extends FlowControl_IType {
         name = "BNE";
     }
 
-    public void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException, BranchException {
+    public void ID() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, JumpException, TwosComplementSumException {
         if (cpu.getRegister(params.get(RS_FIELD)).getWriteSemaphore() > 0 || cpu.getRegister(params.get(RT_FIELD)).getWriteSemaphore() > 0) {
             throw new RAWException();
         }
@@ -76,7 +75,7 @@ public class BNE extends FlowControl_IType {
         throw new JumpException();
     }
 
-    public void EX() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, TwosComplementSumException, JumpException {
+    public void EX() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, TwosComplementSumException, JumpException, BranchException {
         // if (cpu.getRegister(params.get(RS_FIELD)).getWriteSemaphore() > 0 || cpu.getRegister(params.get(RT_FIELD)).getWriteSemaphore() > 0) {
         //   throw new RAWException();
         // }
@@ -111,3 +110,4 @@ public class BNE extends FlowControl_IType {
             CPU.incrementBranchTaken();
         }
     }
+}

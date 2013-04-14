@@ -38,6 +38,7 @@ import org.edumips64.utils.*;
  * (FPU modifications)
  */
 public class CPU {
+
     private static int branchTaken, branchNotTaken, branchMiss; //AMJAD Added these variables
     private Memory mem;
     private Register[] gpr;
@@ -90,7 +91,7 @@ public class CPU {
      *
      * HALTED - the HALT instruction has passed the WB state, and the step()
      * method can't be executed.
-   *
+     *
      */
     public enum CPUStatus {
 
@@ -260,37 +261,32 @@ public class CPU {
     public SymbolTable getSymbolTable() {
         return symTable;
     }
-    
+
     //Amjad Added
-    public int getBranchTaken()
-    {
+    public int getBranchTaken() {
         return branchTaken;
     }
-    
+
     //Amjad Added
-    public int getBranchNotTaken()
-    {
+    public int getBranchNotTaken() {
         return branchNotTaken;
     }
-    
+
     //Amjad Added
-    public int getBranchMiss()
-    {
+    public int getBranchMiss() {
         return branchMiss;
     }
-            
+
     //Amjad Added
-    public static void incrementBranchTaken()
-    {
+    public static void incrementBranchTaken() {
         branchTaken++;
     }
 
     //Amjad Added
-    public static void incrementBranchNotTaken()
-    {
+    public static void incrementBranchNotTaken() {
         branchNotTaken++;
     }
-    
+
     /**
      * This method returns a specific GPR
      *
@@ -346,7 +342,8 @@ public class CPU {
     }
 
     /**
-     * Gets a binary string representing the Floating Point Control Status Register
+     * Gets a binary string representing the Floating Point Control Status
+     * Register
      */
     public String getFCSR() {
         return FCSR.getBinString();
@@ -725,10 +722,7 @@ public class CPU {
                     else {
                         throw new EXNotAvailableException();
                     }
-
-
                 }
-
             }
 
             // IF
@@ -766,7 +760,7 @@ public class CPU {
             if (syncex != null) {
                 throw new SynchronousException(syncex);
             }
-        }
+        } 
         catch (JumpException ex) {
             try {
                 if (pipe.get(PipeStatus.IF) != null) {  //rispetto a dimips scambia le load con le IF
@@ -788,7 +782,39 @@ public class CPU {
                 throw new SynchronousException(syncex);
             }
 
-        } catch (RAWException ex) {
+        }
+        catch (BranchException ex) {
+
+            try {
+                if (pipe.get(PipeStatus.IF) != null) //rispetto a dimips scambia le load con le IF
+                {
+                    pipe.get(PipeStatus.IF).IF();
+                }
+            } catch (BreakException bex) {
+                logger.info("Caught a BREAK after a Jump: ignoring it.");
+            }
+            //BranchMiss++;
+            // A J-Type instruction has just modified the Program Counter. We need to
+            // put in the IF state the instruction the PC points to
+            pipe.put(PipeStatus.EX, Instruction.buildInstruction("NOP"));
+            pipe.put(PipeStatus.ID, Instruction.buildInstruction("BUBBLE"));
+            pipe.put(PipeStatus.MEM, pipe.get(PipeStatus.EX));
+            pipe.put(PipeStatus.IF, mem.getInstruction(pc));
+
+            //pipe.put(PipeStatus.EX, Instruction.buildInstruction("BUBBLE"));	
+            old_pc.writeDoubleWord((pc.getValue()));
+            pc.writeDoubleWord((pc.getValue()) + 4);
+
+            //pipe.put(PipeStatus.ID, pipe.get(PipeStatus.IF));
+            //pipe.put(PipeStatus.IF, mem.getInstruction(pc));
+            //old_pc.writeDoubleWord((pc.getValue()));
+            //pc.writeDoubleWord((pc.getValue())+4);
+
+            if (syncex != null) {
+                throw new SynchronousException(syncex);
+            }
+        }
+        catch (RAWException ex) {
             if (currentPipeStatus == PipeStatus.ID) {
                 pipe.put(PipeStatus.EX, Instruction.buildInstruction("BUBBLE"));
             }
@@ -847,36 +873,6 @@ public class CPU {
             pipe.put(PipeStatus.WB, null);
             throw ex;
         }
-        catch(BranchException ex)
-		{
-			
-			try {
-                if(pipe.get(PipeStatus.IF) != null) //rispetto a dimips scambia le load con le IF
-                        pipe.get(PipeStatus.IF).IF();
-            }
-            catch(BreakException bex) {
-				logger.info("Caught a BREAK after a Jump: ignoring it.");
-            }
-			//BranchMiss++;
-			// A J-Type instruction has just modified the Program Counter. We need to
-			// put in the IF state the instruction the PC points to
-			pipe.put(PipeStatus.EX, Instruction.buildInstruction("NOP"));
-			pipe.put(PipeStatus.ID, Instruction.buildInstruction("BUBBLE"));
-			pipe.put(PipeStatus.MEM, pipe.get(PipeStatus.EX));
-			pipe.put(PipeStatus.IF, mem.getInstruction(pc));
-			
-			//pipe.put(PipeStatus.EX, Instruction.buildInstruction("BUBBLE"));	
-			old_pc.writeDoubleWord((pc.getValue()));
-			pc.writeDoubleWord((pc.getValue())+4);
-		
-				//pipe.put(PipeStatus.ID, pipe.get(PipeStatus.IF));
-				//pipe.put(PipeStatus.IF, mem.getInstruction(pc));
-				//old_pc.writeDoubleWord((pc.getValue()));
-				//pc.writeDoubleWord((pc.getValue())+4);
-			
-			if(syncex != null)
-				throw new SynchronousException(syncex);
-			}
     }
 
     /**
