@@ -28,8 +28,7 @@ import org.edumips64.core.*;
 import org.edumips64.utils.*;
 
 /**
- * <
- * pre>
+ * <pre>
  *        Syntax: BEQZ rs, offset
  *   Description: if rs == 0 then branch
  *                To test a GPR then do a PC-relative conditional branch

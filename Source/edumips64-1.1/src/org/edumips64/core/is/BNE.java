@@ -68,7 +68,6 @@ public class BNE extends FlowControl_IType {
         pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
 
         //updating program counter
-        //offset=InstructionsUtils.twosComplementSum(bs_temp.getBinString(),offset);
         pc_new = InstructionsUtils.twosComplementSum(pc_old, offset);
         pc.setBits(pc_new, 0);
 
@@ -76,9 +75,6 @@ public class BNE extends FlowControl_IType {
     }
 
     public void EX() throws RAWException, IrregularWriteOperationException, IrregularStringOfBitsException, TwosComplementSumException, JumpException, BranchException {
-        // if (cpu.getRegister(params.get(RS_FIELD)).getWriteSemaphore() > 0 || cpu.getRegister(params.get(RT_FIELD)).getWriteSemaphore() > 0) {
-        //   throw new RAWException();
-        // }
 
         //getting registers rs and rt
         String rs = cpu.getRegister(params.get(RS_FIELD)).getBinString();
@@ -100,7 +96,6 @@ public class BNE extends FlowControl_IType {
             pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
 
             //updating program counter
-            //pc_new = InstructionsUtils.twosComplementSum(pc_old, offset);
             pc_new = InstructionsUtils.twosComplementSubstraction(pc_old, offset);
             pc.setBits(pc_new, 0);
 

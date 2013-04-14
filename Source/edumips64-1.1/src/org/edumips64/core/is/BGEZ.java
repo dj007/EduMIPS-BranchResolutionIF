@@ -68,7 +68,6 @@ public class BGEZ extends FlowControl_IType {
         pc_old = InstructionsUtils.twosComplementSum(pc_old, bs_temp.getBinString());
 
         //updating program counter
-        //offset=InstructionsUtils.twosComplementSum(bs_temp.getBinString(),offset);
         pc_new = InstructionsUtils.twosComplementSum(pc_old, offset);
         pc.setBits(pc_new, 0);
 
